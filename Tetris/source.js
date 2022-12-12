@@ -10,8 +10,19 @@ const renderWell = () => {
 
 let well = Array(20).fill(0).map(() => Array(10).fill('□'))
 
+const tets = [ //□■
+	[['□','■','□'],
+	 ['■','■','■'],
+	 ['□','□','□']],
+	[],
+	[],
+	[],
+	[],
+	[],
+	[],
+]
 
-
+console.log(tets);
 console.log(data);
 console.log(renderWell);
 console.log(well);
