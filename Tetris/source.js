@@ -26,3 +26,16 @@ console.log(tets);
 console.log(data);
 console.log(renderWell);
 console.log(well);
+
+
+let before = Date.now();
+const freeFall = () => {
+	const now = Date.now();;
+	if(now - before >= 500){
+		before = now;
+		console.log("HI?");
+	}
+	requestAnimationFrame(freeFall);
+}
+
+requestAnimationFrame(freeFall); // <- requestAnimationFrame이란?
