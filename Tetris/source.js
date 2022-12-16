@@ -22,20 +22,32 @@ const tets = [ //□■
 	[],
 ]
 
-console.log(tets);
-console.log(data);
-console.log(renderWell);
-console.log(well);
+const removeFromWell = (coords, w) => {
+	coords.forEach(c => {
+		if(c.y >= 0 && c.z){
+			well[c.y][c.x] = '■';
+		}
+	});
+};
+
+const canMove = dir => {
+	const tempWell = JSON.parse(JSON.stringify(well));
+	const tempPos = { ...data.pos };
+	data.oldCoords && removeFromWell(data.oldCoords, tempWell);
+}
+
+
+
 
 let before = Date.now();
 const freeFall = () => {
 	const now = Date.now();;
 	if(now - before >= 500){
 		before = now;
-		console.log("UPDATE THIS");
+		canMove('down') && move();
 	}
 	
-	requestAnimationFrame(freeFall);
+	well[8][0] !== 'G' && requestAnimationFrame(freeFall);
 }
 
 requestAnimationFrame(freeFall); // <- requestAnimationFrame이란?

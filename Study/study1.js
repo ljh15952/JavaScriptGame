@@ -32,3 +32,10 @@ const f2 = (x,y,z) => {
 }
 // object 바로 리턴
 const f3 = (x,y,z) => ({x,y,z});
+
+
+// 깊은 복사 배열 할당
+const tempWell = JSON.parse(JSON.stringify(well));
+
+// 깊은 복사로 할당
+const tempPos = { ...data.pos };
