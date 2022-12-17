@@ -22,6 +22,10 @@ const tets = [ //□■
 	[],
 ]
 
+const setCoords = (t, p) => t.map((r,i) => r.map((c, j) => ({x:p.x+j, 
+															 y:p.y+i,
+															z:c==='■'}))).flat();
+
 const removeFromWell = (coords, w) => {
 	coords.forEach(c => {
 		if(c.y >= 0 && c.z){
@@ -34,9 +38,20 @@ const canMove = dir => {
 	const tempWell = JSON.parse(JSON.stringify(well));
 	const tempPos = { ...data.pos };
 	data.oldCoords && removeFromWell(data.oldCoords, tempWell);
+	
+	if(dir === 'rotate'){
+		const flipTet = t => t[0].map((c,i) => t.map(te => te[i]));
+		const rotateTet = t => flipTet([...t].reverse());
+		const tempTet = rotateTet(tet);
+		const tempNC = setCoords(tempTet, tempPos);
+	}
+	
+	return true;
 }
 
-
+const move = dir => {
+	renderWell();
+}
 
 
 let before = Date.now();
@@ -44,7 +59,7 @@ const freeFall = () => {
 	const now = Date.now();;
 	if(now - before >= 500){
 		before = now;
-		canMove('down') && move();
+		canMove('down') && move('down');
 	}
 	
 	well[8][0] !== 'G' && requestAnimationFrame(freeFall);
