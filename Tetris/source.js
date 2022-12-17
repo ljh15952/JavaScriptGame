@@ -2,30 +2,34 @@ const data = {score: 0, oldCoords: null, newCoords: null,
 			   pos: {x: 3, y: -2}, over:false};
 
 const renderWell = () => {
-	document.querySelector('pre').textContent = `${data.score}\n`;
-	well.foeEach(r => {document.querySelector('pre').textContent += `${r.join('')}\n`});
+	document.querySelector('pre').textContent = data.score + '\n';
+	well.forEach(r => {
+		document.querySelector('pre').textContent += r.join('') + '\n';
+	});
 };
-
-//■
 
 let well = Array(20).fill(0).map(() => Array(10).fill('□'))
 
+
 const tets = [ //□■
-	[['□','■','□'],
-	 ['■','■','■'],
-	 ['□','□','□']],
-	[],
-	[],
-	[],
-	[],
-	[],
-	[],
+	[['□','■','□'], ['■','■','■'], ['□','□','□']],
+	[[],[],[]],
+	[[],[],[]],
+	[[],[],[]],
+	[[],[],[]],
+	[[],[],[]],
+	[[],[],[],[]],
 ]
 
-const setCoords = (t, p) => t.map((r,i) => r.map((c, j) => ({x:p.x+j, 
-															 y:p.y+i,
-															z:c==='■'}))).flat();
+let tet = tets[Math.floor(Math.random() * tets.length)];
 
+const setCoords = (t, p) => {
+	console.log(t + " " + p);
+	// t.map((r,i) => 
+	// 	r.map((c, j) => 
+	// 		  ({x:p.x+j, y:p.y+i, z:c==='■'}))).flat();
+}
+setCoords(tet, data.pos);
 const removeFromWell = (coords, w) => {
 	coords.forEach(c => {
 		if(c.y >= 0 && c.z){
@@ -50,6 +54,13 @@ const canMove = dir => {
 }
 
 const move = dir => {
+	if(dir == 'down') { data.pos.y += 1; }
+	if(dir == 'left') { data.pos.x -= 1; }
+	if(dir == 'right') { data.pos.x += 1; }
+	//data.newCoords = setCoords(tet, data.pos);
+	
+	
+	
 	renderWell();
 }
 
