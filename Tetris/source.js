@@ -13,23 +13,31 @@ let well = Array(20).fill(0).map(() => Array(10).fill('□'))
 
 const tets = [ //□■
 	[['□','■','□'], ['■','■','■'], ['□','□','□']],
-	[[],[],[]],
-	[[],[],[]],
-	[[],[],[]],
-	[[],[],[]],
-	[[],[],[]],
-	[[],[],[],[]],
+	[['□','■','□'], ['■','■','■'], ['□','□','□']],
+	[['□','■','□'], ['■','■','■'], ['□','□','□']],
+	[['□','■','□'], ['■','■','■'], ['□','□','□']],
+	[['□','■','□'], ['■','■','■'], ['□','□','□']],
+	[['□','■','□'], ['■','■','■'], ['□','□','□']],
+	[['□', '□', '□', '□'], ['■', '■', '■', '■'], ['□', '□', '□', '□']],
 ]
 
 let tet = tets[Math.floor(Math.random() * tets.length)];
 
-const setCoords = (t, p) => {
-	console.log(t + " " + p);
-	// t.map((r,i) => 
-	// 	r.map((c, j) => 
-	// 		  ({x:p.x+j, y:p.y+i, z:c==='■'}))).flat();
-}
-setCoords(tet, data.pos);
+// const setCoords = (t, p) => {
+// 	console.log(t + " " + p.x + " " + p.y);
+// 	t.map((r,i) => {
+// 		console.log(r + " " + i); 
+// 		r.map((c,j)=>{
+// 			console.log(c + " " + j);
+// 		}) 
+// 	});
+// 	t.map((r,i) => 
+// 		r.map((c, j) => 
+// 			  ({x:p.x+j, y:p.y+i, z:c==='■'}))).flat();
+// }
+const setCoords = (t, p) => t.map((r, i) => r.map((c, j) => ({ x: p.x + j, y: p.y + i, z: c === '■' }))).flat();
+
+console.log(setCoords(tet, data.pos));
 const removeFromWell = (coords, w) => {
 	coords.forEach(c => {
 		if(c.y >= 0 && c.z){
