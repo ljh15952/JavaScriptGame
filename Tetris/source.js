@@ -23,22 +23,29 @@ const tets = [ //□■
 
 let tet = tets[Math.floor(Math.random() * tets.length)];
 
-// const setCoords = (t, p) => {
-// 	console.log(t + " " + p.x + " " + p.y);
-// 	t.map((r,i) => {
-// 		console.log(r + " " + i); 
-// 		r.map((c,j)=>{
-// 			console.log(c + " " + j);
-// 		}) 
-// 	});
-// 	t.map((r,i) => 
-// 		r.map((c, j) => 
-// 			  ({x:p.x+j, y:p.y+i, z:c==='■'}))).flat();
-// }
-const setCoords = (t, p) => t.map((r, i) => r.map((c, j) => ({ x: p.x + j, y: p.y + i, z: c === '■' }))).flat();
+const setCoords = (t, p) => 
+t.map((r, i) => 
+	  r.map((c, j) => 
+			({ x: p.x + j, y: p.y + i, z: c == '■' }))).flat();
 
-console.log(setCoords(tet, data.pos));
-const removeFromWell = (coords, w) => {
+
+const removeFromWell = (coords) => {
+	// coords.forEach(c => {
+	// 	if(c.y >= 0 && c.z){
+	// 		well[c.y][c.x] = '□';
+	// 	}
+	// });
+	
+	// 같은 행동
+	// for(var i = 0; i < 20; ++i){
+	// 	for(var j = 0; j < 10; ++j){
+	// 		well[i][j] = '□';
+	// 	}
+	// }
+	
+};
+
+const placeOnWell = coords => {
 	coords.forEach(c => {
 		if(c.y >= 0 && c.z){
 			well[c.y][c.x] = '■';
@@ -47,16 +54,16 @@ const removeFromWell = (coords, w) => {
 };
 
 const canMove = dir => {
-	const tempWell = JSON.parse(JSON.stringify(well));
-	const tempPos = { ...data.pos };
-	data.oldCoords && removeFromWell(data.oldCoords, tempWell);
+	// const tempWell = JSON.parse(JSON.stringify(well));
+	// const tempPos = { ...data.pos };
+	// data.oldCoords && removeFromWell(data.oldCoords, tempWell);
 	
-	if(dir === 'rotate'){
-		const flipTet = t => t[0].map((c,i) => t.map(te => te[i]));
-		const rotateTet = t => flipTet([...t].reverse());
-		const tempTet = rotateTet(tet);
-		const tempNC = setCoords(tempTet, tempPos);
-	}
+	// if(dir === 'rotate'){
+	// 	const flipTet = t => t[0].map((c,i) => t.map(te => te[i]));
+	// 	const rotateTet = t => flipTet([...t].reverse());
+	// 	const tempTet = rotateTet(tet);
+	// 	const tempNC = setCoords(tempTet, tempPos);
+	// }
 	
 	return true;
 }
@@ -65,10 +72,10 @@ const move = dir => {
 	if(dir == 'down') { data.pos.y += 1; }
 	if(dir == 'left') { data.pos.x -= 1; }
 	if(dir == 'right') { data.pos.x += 1; }
-	//data.newCoords = setCoords(tet, data.pos);
-	
-	
-	
+	data.newCoords = setCoords(tet, data.pos);
+	data.oldCoords && removeFromWell(data.oldCoords);
+	placeOnWell(data.newCoords);
+	data.oldCoords = data.newCoords;
 	renderWell();
 }
 
