@@ -30,11 +30,12 @@ t.map((r, i) =>
 
 
 const removeFromWell = (coords) => {
-	// coords.forEach(c => {
-	// 	if(c.y >= 0 && c.z){
-	// 		well[c.y][c.x] = '□';
-	// 	}
-	// });
+	console.log(coords);
+	coords.forEach(c => {
+		if(c.y >= 0 && c.z){
+			well[c.y][c.x] = '□';
+		}
+	});
 	
 	// 같은 행동
 	// for(var i = 0; i < 20; ++i){
@@ -51,6 +52,13 @@ const placeOnWell = coords => {
 			well[c.y][c.x] = '■';
 		}
 	});
+	
+	// 같은 행동
+	// for(var i = 0; i < coords.length; ++i){
+	// 	if(coords[i].y >= 0 && coords[i].z){
+	// 		well[coords[i].y][coords[i].x] = '■';
+	// 	}
+	// }
 };
 
 const canMove = dir => {
