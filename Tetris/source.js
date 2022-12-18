@@ -1,5 +1,5 @@
 const data = {score: 0, oldCoords: null, newCoords: null,
-			   pos: {x: 3, y: -2}, over:false};
+			   pos: {x: 0, y: -2}, over:false};
 
 const renderWell = () => {
 	document.querySelector('pre').textContent = data.score + '\n';
