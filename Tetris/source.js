@@ -30,11 +30,14 @@ window.addEventListener('keydown', e=>{
   	e.code === 'ArrowUp' && !data.over && canMove('rotate') && move();
 });
 
-
-const setCoords = (t, p) => 
-t.map((r, i) => 
+// flat() 함수 대체
+const setCoords = (t, p) =>
+tet.map((r, i) => 
 	  r.map((c, j) => 
-			({ x: p.x + j, y: p.y + i, z: c == '■' }))).flat();
+			({ x: p.x + j, y: p.y + i, z: c == '■' }))).reduce((acc,val)=>acc.concat(val), []);
+// t.map((r, i) => 
+// 	  r.map((c, j) => 
+// 			({ x: p.x + j, y: p.y + i, z: c == '■' }))).flat();
 
 
 const removeFromWell = (coords,w) => {
