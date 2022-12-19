@@ -11,20 +11,23 @@ const renderWell = () => {
 let well = Array(20).fill(0).map(() => Array(10).fill('□'))
 
 
-const tets = [ //□■
-	[['□','■','□'], ['■','■','■'], ['□','□','□']],
-	[['□','■','□'], ['■','■','■'], ['□','□','□']],
-	[['□','■','□'], ['■','■','■'], ['□','□','□']],
-	[['□','■','□'], ['■','■','■'], ['□','□','□']],
-	[['□','■','□'], ['■','■','■'], ['□','□','□']],
-	[['□','■','□'], ['■','■','■'], ['□','□','□']],
-	[['□', '□', '□', '□'], ['■', '■', '■', '■'], ['□', '□', '□', '□']],
-]
+const tets = [
+  [['□', '■', '□'], ['■', '■', '■'], ['□', '□', '□']], 
+  [['■', '□', '□'], ['■', '■', '■'], ['□', '□', '□']], 
+  [['□', '□', '■'], ['■', '■', '■'], ['□', '□', '□']], 
+  [['■', '■', '□'], ['■', '■', '□'], ['□', '□', '□']], 
+  [['□', '■', '■'], ['■', '■', '□'], ['□', '□', '□']], 
+  [['■', '■', '□'], ['□', '■', '■'], ['□', '□', '□']],
+  [['□', '□', '□', '□'], ['■', '■', '■', '■'], ['□', '□', '□', '□']], // I
+];
 
 let tet = tets[Math.floor(Math.random() * tets.length)];
 
 window.addEventListener('keydown', e=>{
-	//code == 'ArrowDown' && can
+	e.code === 'ArrowDown' && canMove('down') && move('down');
+	e.code === 'ArrowLeft' && !data.over && canMove('left') && move('left');
+ 	e.code === 'ArrowRight' && !data.over && canMove('right') && move('right');
+  	e.code === 'ArrowUp' && !data.over && canMove('rotate') && move();
 });
 
 
@@ -35,9 +38,10 @@ t.map((r, i) =>
 
 
 const removeFromWell = (coords,w) => {
+	const ww = w;
 	coords.forEach(c => {
 		if(c.y >= 0 && c.z){
-			w[c.y][c.x] = '□';
+			ww[c.y][c.x] = '□';
 		}
 	});
 	
@@ -70,12 +74,18 @@ const canMove = dir => {
 	const tempPos = { ...data.pos };
 	data.oldCoords && removeFromWell(data.oldCoords, tempWell);
 	
-	// if(dir === 'rotate'){
-	// 	const flipTet = t => t[0].map((c,i) => t.map(te => te[i]));
-	// 	const rotateTet = t => flipTet([...t].reverse());
-	// 	const tempTet = rotateTet(tet);
-	// 	const tempNC = setCoords(tempTet, tempPos);
-	// }
+	if(dir === 'rotate'){
+		const flipTet = t => t[0].map((c,i) => t.map(te => te[i]));
+		const rotateTet = t => flipTet([...t].reverse());
+		const tempTet = rotateTet(tet);
+		const tempNC = setCoords(tempTet, tempPos);
+		const collided = tempNC.some(c => c.z && c.y >= 0 && ((!tempWell[c.y][c.x]) || (tempWell[c.y][c.x] === '■')));
+    	if (!collided) {
+     		tet = rotateTet(tet);
+      		return true;
+    	}
+    	return false;
+	}
 	
 	if(dir == 'down'){
 		tempPos.y += 1;
@@ -86,7 +96,7 @@ const canMove = dir => {
 			data.newCoords = null;
 			data.oldCoords = null;
 			clearFullRows();
-			let tet = tets[Math.floor(Math.random() * tets.length)];
+			tet = tets[Math.floor(Math.random() * tets.length)];
 		}
 		if (collided && well[0].slice(3, 6).includes('■')) {
      		well[8] = ['G', 'A', 'M', 'E', ' ', 'O', 'V', 'E', 'R'];
@@ -95,9 +105,18 @@ const canMove = dir => {
     	}
     	return !collided;
 	}
-	
+	if (dir === 'left') {
+		tempPos.x -= 1;
+		const tempNC = setCoords(tet, tempPos);
+		return !tempNC.some(c => c.z && (!(tempWell[c.y] && tempWell[c.y][c.x]) || (tempWell[c.y][c.x] === '■')));
+ 	}
+  	if (dir === 'right') {
+		tempPos.x += 1;
+		const tempNC = setCoords(tet, tempPos);
+		return !tempNC.some(c => c.z && (!(tempWell[c.y] && tempWell[c.y][c.x]) || (tempWell[c.y][c.x] === '■')));
+  	}
 	return true;
-}
+};
 
 const move = dir => {
 	if(dir == 'down') { data.pos.y += 1; }
@@ -111,15 +130,14 @@ const move = dir => {
 }
 
 const clearFullRows = () => {
-	well = well.reduce((acc, cur)=>{
-		if(cur.every(c => c == '■')){
-			data.score += 1;
-			return [Array(10).fill('■'), ...acc];
-		}
-		return [...acc, cur];
-	}, []);
+  	well = well.reduce((acc, cur) => {
+    	if (cur.every(c => c === '■')) {
+      		data.score += 1;
+      		return [Array(10).fill('□'), ...acc];
+    	}
+    	return [...acc, cur];
+  }, []);
 };
-
 
 let before = Date.now();
 const freeFall = () => {
