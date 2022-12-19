@@ -23,24 +23,28 @@ const tets = [ //□■
 
 let tet = tets[Math.floor(Math.random() * tets.length)];
 
+window.addEventListener('keydown', e=>{
+	//code == 'ArrowDown' && can
+});
+
+
 const setCoords = (t, p) => 
 t.map((r, i) => 
 	  r.map((c, j) => 
 			({ x: p.x + j, y: p.y + i, z: c == '■' }))).flat();
 
 
-const removeFromWell = (coords) => {
-	console.log(coords);
+const removeFromWell = (coords,w) => {
 	coords.forEach(c => {
 		if(c.y >= 0 && c.z){
-			well[c.y][c.x] = '□';
+			w[c.y][c.x] = '□';
 		}
 	});
 	
 	// 같은 행동
 	// for(var i = 0; i < 20; ++i){
 	// 	for(var j = 0; j < 10; ++j){
-	// 		well[i][j] = '□';
+	// 		w[i][j] = '□';
 	// 	}
 	// }
 	
@@ -62,9 +66,9 @@ const placeOnWell = coords => {
 };
 
 const canMove = dir => {
-	// const tempWell = JSON.parse(JSON.stringify(well));
-	// const tempPos = { ...data.pos };
-	// data.oldCoords && removeFromWell(data.oldCoords, tempWell);
+	const tempWell = JSON.parse(JSON.stringify(well));
+	const tempPos = { ...data.pos };
+	data.oldCoords && removeFromWell(data.oldCoords, tempWell);
 	
 	// if(dir === 'rotate'){
 	// 	const flipTet = t => t[0].map((c,i) => t.map(te => te[i]));
@@ -72,6 +76,25 @@ const canMove = dir => {
 	// 	const tempTet = rotateTet(tet);
 	// 	const tempNC = setCoords(tempTet, tempPos);
 	// }
+	
+	if(dir == 'down'){
+		tempPos.y += 1;
+		const tempNC = setCoords(tet, tempPos);
+		const collided = tempNC.some(c => c.z && c.y >= 0 && ((!tempWell[c.y]) || (tempWell[c.y][c.x] == '■')));
+		if(data.oldCoords && collided && !well[0].slice(3,6).includes('■')){
+			data.pos = {x:0, y:-2};
+			data.newCoords = null;
+			data.oldCoords = null;
+			clearFullRows();
+			let tet = tets[Math.floor(Math.random() * tets.length)];
+		}
+		if (collided && well[0].slice(3, 6).includes('■')) {
+     		well[8] = ['G', 'A', 'M', 'E', ' ', 'O', 'V', 'E', 'R'];
+      		data.over = true;
+      		renderWell();
+    	}
+    	return !collided;
+	}
 	
 	return true;
 }
@@ -81,11 +104,21 @@ const move = dir => {
 	if(dir == 'left') { data.pos.x -= 1; }
 	if(dir == 'right') { data.pos.x += 1; }
 	data.newCoords = setCoords(tet, data.pos);
-	data.oldCoords && removeFromWell(data.oldCoords);
+	data.oldCoords && removeFromWell(data.oldCoords, well);
 	placeOnWell(data.newCoords);
 	data.oldCoords = data.newCoords;
 	renderWell();
 }
+
+const clearFullRows = () => {
+	well = well.reduce((acc, cur)=>{
+		if(cur.every(c => c == '■')){
+			data.score += 1;
+			return [Array(10).fill('■'), ...acc];
+		}
+		return [...acc, cur];
+	}, []);
+};
 
 
 let before = Date.now();
