@@ -1,0 +1,3 @@
+reduce some 함수 조사
+rotate 부분 조사
+slices, include함수 조사
