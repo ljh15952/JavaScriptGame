@@ -22,8 +22,8 @@
 const clearFullRows = () => {
   	well = well.reduce((acc, cur) => {
     	if (cur.every(c => c === '■')) { //모든 한 줄이 block이라면
-      		data.score += 1;
-      		return [Array(10).fill('□'), ...acc];
+      		data.score += 1; // 1점 추가
+      		return [Array(10).fill('□'), ...acc]; //
     	}
     	return [...acc, cur];
   }, []);
@@ -41,3 +41,11 @@ tet.map((r, i) =>
 // if(arr.every(i => i > 0)){
 // 	console.log("correct");
 // }
+
+
+arr = [1,2,3,4,5];
+
+for(var i of arr){
+	i += 10;
+}
+console.log(arr);

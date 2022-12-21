@@ -133,18 +133,25 @@ const move = dir => {
 }
 
 const clearFullRows = () => {
-  	well = well.reduce((acc, cur) => {
+  // 	well = well.reduce((acc, cur) => {
+  //   	if (cur.every(c => c === '■')) {
+  //     		data.score += 1;
+  //     		return [Array(10).fill('□'), ...acc];
+  //   	}
+  //   	return [...acc, cur];
+  // }, []);
+	well.reduce((acc, cur) => {
     	if (cur.every(c => c === '■')) {
       		data.score += 1;
       		return [Array(10).fill('□'), ...acc];
-    	}
+		}
     	return [...acc, cur];
-  }, []);
+  },[]);
 };
 
 let before = Date.now();
 const freeFall = () => {
-	const now = Date.now();;
+	const now = Date.now();
 	if(now - before >= 500){
 		before = now;
 		canMove('down') && move('down');
