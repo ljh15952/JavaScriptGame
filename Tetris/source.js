@@ -73,9 +73,9 @@ const placeOnWell = coords => {
 };
 
 const canMove = dir => {
-	const tempWell = JSON.parse(JSON.stringify(well));
-	const tempPos = { ...data.pos };
-	data.oldCoords && removeFromWell(data.oldCoords, tempWell);
+	const tempWell = JSON.parse(JSON.stringify(well)); // well은 왜 만들지 새로
+	const tempPos = { ...data.pos }; // pos는 인정
+	data.oldCoords && removeFromWell(data.oldCoords, tempWell); // oldCoords가 있으면 새로만든 well을 다 비워 줌
 	
 	if(dir === 'rotate'){
 		const flipTet = t => t[0].map((c,i) => t.map(te => te[i]));
