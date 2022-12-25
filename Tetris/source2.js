@@ -20,7 +20,7 @@ const canMove = () => {
 	return true;
 }
 
-const move = () = {
+const move = () => {
 	console.log("move");
 }
 
