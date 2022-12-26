@@ -69,7 +69,22 @@ const placeOnWell = (c,w) => {
 	});
 };
 
-const canMove = () => {
+const canMove = (dir) => {
+	
+	if(dir === 'down'){
+		let tempPos = {x:pos.x, y:pos.y+1};
+		let tempCoords = setCoords(tet,tempPos);
+		let collided = tempCoords.some(c =>
+			c.z && c.y >= 5 && (c.y > 19 ||wall.old[c.y][c.x] === 1)
+		);
+		if(collided){
+			pos = {x:0, y:-2};
+			placeOnWell(coords,wall.old);
+			tet = tets[Math.floor(Math.random() * tets.length)];
+		}
+		return !collided;
+	}
+	
 	return true;
 }
 
@@ -85,7 +100,7 @@ const update = () => {
 	let current = Date.now();
 	if(current - before >= 350){
 		before = current;
-		canMove('down') && move('down');
+	//	canMove('down') && move('down');
 	}
 	renderWall();
 	requestAnimationFrame(update);
