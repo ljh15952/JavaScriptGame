@@ -5,6 +5,19 @@ let wall = {new:null, old:null};
 wall.new = Array(20).fill(0).map(()=>Array(10).fill(0));
 wall.old = Array(20).fill(0).map(()=>Array(10).fill(0));
 
+let pos = {x:0,y:-2};
+const tets = [
+  [['□', '■', '□'], ['■', '■', '■'], ['□', '□', '□']], 
+  [['■', '□', '□'], ['■', '■', '■'], ['□', '□', '□']], 
+  [['□', '□', '■'], ['■', '■', '■'], ['□', '□', '□']], 
+  [['■', '■', '□'], ['■', '■', '□'], ['□', '□', '□']], 
+  [['□', '■', '■'], ['■', '■', '□'], ['□', '□', '□']], 
+  [['■', '■', '□'], ['□', '■', '■'], ['□', '□', '□']],
+  [['□', '□', '□', '□'], ['■', '■', '■', '■'], ['□', '□', '□', '□']], // I
+];
+
+let tet = tets[Math.floor(Math.random() * tets.length)];
+
 const renderWall = () => {
 	wall.old.map((a,i)=>{
 		a.map((b,j) => {
@@ -37,18 +50,21 @@ const setCoords = (t, p) =>
 tet.map((r, i) => 
 	  r.map((c, j) => 
 			({ x: p.x + j, y: p.y + i, z: c == '■' }))).reduce((acc,val)=>acc.concat(val), []);
-const removeFromWell = (coords,w) => {
+
+let coords = setCoords(tet,pos);
+
+const removeFromWell = (c,w) => {
 	const ww = w;
-	coords.forEach(c => {
-		if(c.y >= 0 && c.z){
-			ww[c.y][c.x] = 0;
+	coords.forEach(b => {
+		if(b.y >= 0 && b.z){
+			ww[b.y][b.x] = 0;
 		}
 	});
 };
-const placeOnWell = coords => {
-	coords.forEach(c => {
-		if(c.y >= 0 && c.z){
-			well[c.y][c.x] = 1;
+const placeOnWell = (c,w) => {
+	c.forEach(b => {
+		if(b.y >= 0 && b.z){
+			w[b.y][b.x] = 1;
 		}
 	});
 };
@@ -57,10 +73,11 @@ const canMove = () => {
 	return true;
 }
 
-const move = () => {
-	removeFromWell
-	if(dir == 'down') { data.pos.y += 1; }
-	
+const move = (dir) => {
+	removeFromWell(coords,wall.new);
+	if(dir == 'down') { pos.y += 1; }
+	coords = setCoords(tet,pos);
+	placeOnWell(coords,wall.new);
 }
 
 let before = Date.now();
