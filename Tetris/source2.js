@@ -5,7 +5,7 @@ let wall = {new:null, old:null};
 wall.new = Array(20).fill(0).map(()=>Array(10).fill(0));
 wall.old = Array(20).fill(0).map(()=>Array(10).fill(0));
 
-let pos = {x:0,y:-2};
+let pos = {x:5,y:-2};
 const tets = [
   [['□', '■', '□'], ['■', '■', '■'], ['□', '□', '□']], 
   [['■', '□', '□'], ['■', '■', '■'], ['□', '□', '□']], 
@@ -41,8 +41,8 @@ const renderWall = () => {
 
 window.addEventListener('keydown', e=>{
 	e.code === 'ArrowDown' && canMove('down') && move('down');
-	//e.code === 'ArrowLeft' && canMove('left') && move('left');
- //	e.code === 'ArrowRight' && canMove('right') && move('right');
+	e.code === 'ArrowLeft' && canMove('left') && move('left');
+    e.code === 'ArrowRight' && canMove('right') && move('right');
   //	e.code === 'ArrowUp' && canMove('rotate') && move();
 });
 
@@ -75,7 +75,7 @@ const canMove = (dir) => {
 		let tempPos = {x:pos.x, y:pos.y+1};
 		let tempCoords = setCoords(tet,tempPos);
 		let collided = tempCoords.some(c =>
-			c.z && c.y >= 5 && (c.y > 19 ||wall.old[c.y][c.x] === 1)
+			c.z && c.y >= 0 && ( !wall.old[c.y] || wall.old[c.y][c.x] === 1)
 		);
 		if(collided){
 			pos = {x:0, y:-2};
@@ -84,13 +84,30 @@ const canMove = (dir) => {
 		}
 		return !collided;
 	}
-	
+	if(dir === 'left'){
+		let tempPos = {x:pos.x-1, y:pos.y};
+		let tempCoords = setCoords(tet,tempPos);
+		return !tempCoords.some(c =>
+			//c.z && (!(wall.old[c.y] && wall.old[c.y][c.x]) || wall.old[c.y][c.x] === 1)
+			c.z && (c.x < 0 || wall.old[c.y][c.x] === 1)
+		);
+	}
+	if(dir === 'right'){
+		let tempPos = {x:pos.x+1, y:pos.y};
+		let tempCoords = setCoords(tet,tempPos);
+		return !tempCoords.some(c =>
+			//c.z && (!(wall.old[c.y] && wall.old[c.y][c.x]) || wall.old[c.y][c.x] === 1)
+			c.z && (c.x >= 19 || wall.old[c.y][c.x] === 1)
+		);
+	}
 	return true;
 }
 
 const move = (dir) => {
 	removeFromWell(coords,wall.new);
 	if(dir == 'down') { pos.y += 1; }
+	if(dir == 'left') { pos.x -= 1; }
+	if(dir == 'right') { pos.x += 1; }
 	coords = setCoords(tet,pos);
 	placeOnWell(coords,wall.new);
 }
