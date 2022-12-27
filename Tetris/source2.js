@@ -43,11 +43,11 @@ window.addEventListener('keydown', e=>{
 	e.code === 'ArrowDown' && canMove('down') && move('down');
 	e.code === 'ArrowLeft' && canMove('left') && move('left');
     e.code === 'ArrowRight' && canMove('right') && move('right');
-  //	e.code === 'ArrowUp' && canMove('rotate') && move();
+    e.code === 'ArrowUp' && canMove('rotate') && move();
 });
 
 const setCoords = (t, p) =>
-tet.map((r, i) => 
+t.map((r, i) => 
 	  r.map((c, j) => 
 			({ x: p.x + j, y: p.y + i, z: c == '■' }))).reduce((acc,val)=>acc.concat(val), []);
 
@@ -71,6 +71,19 @@ const placeOnWell = (c,w) => {
 
 const canMove = (dir) => {
 	
+	
+	if(dir === 'rotate'){
+		const flipTet = t => t[0].map((c,i)=>t.map(te => te[i]));
+		const rotateTet = t => flipTet([...t].reverse());
+		let tempTet = rotateTet(tet);
+		let tempCoords = setCoords(tempTet,pos);
+		let collided = tempCoords.some(c => c.z && c.y >= 0 && ((c.x < 0) || (c.x > 9) ||(wall.old[c.y][c.x] === 1)));
+		if(!collided){
+			tet = rotateTet(tet);
+			return true;
+		}
+		return false;
+	}
 	if(dir === 'down'){
 		let tempPos = {x:pos.x, y:pos.y+1};
 		let tempCoords = setCoords(tet,tempPos);
@@ -135,13 +148,3 @@ const update = () => {
 }
 
 requestAnimationFrame(update);
-
-
-/*
-
-1. c언어 (마스터)하고 c++로 넘어가기 -> 하고싶은거
-2. c++하고 -> 하고싶은거
-3. 파이썬 -> 하고싶은거 강력해 쉬워
-
-
-*/
