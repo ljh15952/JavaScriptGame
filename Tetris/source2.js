@@ -88,16 +88,14 @@ const canMove = (dir) => {
 		let tempPos = {x:pos.x-1, y:pos.y};
 		let tempCoords = setCoords(tet,tempPos);
 		return !tempCoords.some(c =>
-			//c.z && (!(wall.old[c.y] && wall.old[c.y][c.x]) || wall.old[c.y][c.x] === 1)
-			c.z && (c.x < 0 || wall.old[c.y][c.x] === 1)
+			c.z && c.y >=0 && (c.x < 0 || wall.old[c.y][c.x] === 1)
 		);
 	}
 	if(dir === 'right'){
 		let tempPos = {x:pos.x+1, y:pos.y};
 		let tempCoords = setCoords(tet,tempPos);
 		return !tempCoords.some(c =>
-			//c.z && (!(wall.old[c.y] && wall.old[c.y][c.x]) || wall.old[c.y][c.x] === 1)
-			c.z && (c.x >= 19 || wall.old[c.y][c.x] === 1)
+			c.z && c.y >=0 && (c.x > 9 || wall.old[c.y][c.x] === 1)
 		);
 	}
 	return true;
