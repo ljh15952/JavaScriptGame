@@ -81,6 +81,8 @@ const canMove = (dir) => {
 			pos = {x:0, y:-2};
 			placeOnWell(coords,wall.old);
 			tet = tets[Math.floor(Math.random() * tets.length)];
+			
+			clearFullRows();
 		}
 		return !collided;
 	}
@@ -109,6 +111,17 @@ const move = (dir) => {
 	coords = setCoords(tet,pos);
 	placeOnWell(coords,wall.new);
 }
+
+// must know
+const clearFullRows = () =>{
+	wall.old = wall.old.reduce((acc, cur) => {
+		if(cur.every(c=> c === 1)){
+			console.log("one up");
+			return [Array(10).fill(0), ...acc];
+		}
+		return [...acc, cur];
+	}, []);
+};
 
 let before = Date.now();
 const update = () => {
