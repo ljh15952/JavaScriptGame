@@ -96,6 +96,7 @@ const canMove = (dir) => {
 			tet = tets[Math.floor(Math.random() * tets.length)];
 			
 			clearFullRows();
+			removeFromWell(coords,wall.new);
 		}
 		return !collided;
 	}
@@ -141,7 +142,7 @@ const update = () => {
 	let current = Date.now();
 	if(current - before >= 350){
 		before = current;
-	//	canMove('down') && move('down');
+		canMove('down') && move('down');
 	}
 	renderWall();
 	requestAnimationFrame(update);
