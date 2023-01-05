@@ -149,3 +149,9 @@ const update = () => {
 }
 
 requestAnimationFrame(update);
+
+// 배열 회전 알고리즘
+// matrix[j][size-i-1] = temp[i][j]
+
+// 0,0 -> 0,2
+// 0,1 -> 1,2 ....
