@@ -15,14 +15,39 @@ canvas.addEventListener('contextmenu', (e) => {
 	rClick();
 });
 
-let board = Array(20).fill(0).map(()=>Array(10).fill(0));
 // 20행 10열
+let board = Array(20).fill(0).map(()=>Array(10).fill(0));
 let visited = Array(20).fill(0).map(()=>Array(10).fill(0));
-visited[19][2] = 1;
-visited[5][6] = 1;
-visited[5][7] = 1;
-visited[5][8] = 1;
-console.log(visited);
+
+let arr = [];
+
+let dx = [1,1,0,-1,-1,-1,0,1];
+let dy = [0,1,1,1,0,-1,-1,-1];
+
+for(var i = 0; i < 10; ++i){
+	rx = Math.floor(Math.random() * 10);
+	ry = Math.floor(Math.random() * 20);
+	while(board[ry][rx] === '*'){
+		rx = Math.floor(Math.random() * 10);
+		ry = Math.floor(Math.random() * 20);
+	}
+	board[ry][rx] = '*';
+	console.log(rx + ' ' + ry);
+	
+	for(var j = 0; j < 8; ++j){
+		let nx = rx + dx[j];
+		let ny = ry + dy[j];
+		if(nx < 0 || ny < 0 || nx >= 10 || ny >= 20) continue;
+		if(board[ny][nx] === '*') continue;
+		board[ny][nx]++;
+	}
+}
+
+
+
+
+
+
 const draw = () => {
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 	
@@ -33,13 +58,17 @@ const draw = () => {
 	// 	ctx.fillText(c,i * 30 + 6 ,(j+1) * 30 - 3);
 	// }));
 	
+	// visited.map((r, i) => r.map((c, j) => {
+	// 	if(c == 0){
+	// 		ctx.fillRect(j*32, i * 32, 30, 30);
+	// 	}else{
+	// 		ctx.strokeRect(j*32, i * 32, 30, 30);
+	// 		ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
+	// 	}
+	// }));
 	visited.map((r, i) => r.map((c, j) => {
-		if(c == 0){
-			ctx.fillRect(j*32, i * 32, 30, 30);
-		}else{
-			ctx.strokeRect(j*32, i * 32, 30, 30);
-			ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
-		}
+		ctx.strokeRect(j*32, i * 32, 30, 30);
+		ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
 	}));
 }
 
