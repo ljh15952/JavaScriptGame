@@ -53,26 +53,23 @@ const draw = () => {
 	
 	ctx.font = '30px Arial';
 	
-	// board.map((r, i) => r.map((c, j) => {
-	// 	ctx.strokeRect(i*30, j * 30, 30, 30);
-	// 	ctx.fillText(c,i * 30 + 6 ,(j+1) * 30 - 3);
-	// }));
-	
-	// visited.map((r, i) => r.map((c, j) => {
-	// 	if(c == 0){
-	// 		ctx.fillRect(j*32, i * 32, 30, 30);
-	// 	}else{
-	// 		ctx.strokeRect(j*32, i * 32, 30, 30);
-	// 		ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
-	// 	}
-	// }));
 	visited.map((r, i) => r.map((c, j) => {
-		ctx.strokeRect(j*32, i * 32, 30, 30);
-		ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
+		if(c == 0){
+			ctx.fillRect(j*32, i * 32, 30, 30);
+		}else{
+			ctx.strokeRect(j*32, i * 32, 30, 30);
+			ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
+		}
 	}));
+	// visited.map((r, i) => r.map((c, j) => {
+	// 	ctx.strokeRect(j*32, i * 32, 30, 30);
+	// 	ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
+	// }));
 }
 
 const lClick = () => {
+	// BFS start
+	
 	visited[pos.y][pos.x] = 1;
 }
 
