@@ -3,35 +3,52 @@ const ctx = canvas.getContext('2d');
 
 pos = {x:0,y:0};
 
-canvas.addEventListener('click', () => console.log(pos));
 canvas.addEventListener('mousemove', e => {
   const canv = canvas.getBoundingClientRect();
-  pos = { x: Math.floor((e.clientX - canv.left) / 5), y: Math.floor((e.clientY - canv.top) / 5) };
+  pos = { x: Math.floor((e.clientX - canv.left) / 32), 
+		 y: Math.floor((e.clientY - canv.top) / 32) };
 });
-
+canvas.addEventListener('click', () => lClick());
 canvas.addEventListener('contextmenu', (e) => {
   e.preventDefault();
-  console.log(pos)
+  console.log(pos);
+	rClick();
 });
 
+let board = Array(20).fill(0).map(()=>Array(10).fill(0));
+// 20행 10열
+let visited = Array(20).fill(0).map(()=>Array(10).fill(0));
+visited[19][2] = 1;
+visited[5][6] = 1;
+visited[5][7] = 1;
+visited[5][8] = 1;
+console.log(visited);
 const draw = () => {
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-	ctx.font = '15px Arial';
 	
-	ctx.strokeRect(80 - 3,120 - 13,15,15);
-	ctx.fillText(0,80,120);
+	ctx.font = '30px Arial';
 	
-	ctx.strokeRect(100 - 3,120 - 13,15,15);
-	ctx.fillText(1,100,120);
+	// board.map((r, i) => r.map((c, j) => {
+	// 	ctx.strokeRect(i*30, j * 30, 30, 30);
+	// 	ctx.fillText(c,i * 30 + 6 ,(j+1) * 30 - 3);
+	// }));
 	
-	ctx.strokeRect(120 - 3,120 - 13,15,15);
-	ctx.fillText(2,120,120);
-	
-	ctx.strokeRect(140 - 3,120 - 13,15,15);
-	ctx.fillText(3,140,120);
-	
-	ctx.strokeRect(160 - 3,120 - 13,15,15);
-	ctx.fillText(4,160,120);
+	visited.map((r, i) => r.map((c, j) => {
+		if(c == 0){
+			ctx.fillRect(j*32, i * 32, 30, 30);
+		}else{
+			ctx.strokeRect(j*32, i * 32, 30, 30);
+			ctx.fillText(board[i][j],j * 32 + 7 ,(i+1) * 32 - 7);
+		}
+	}));
+}
+
+const lClick = () => {
+	visited[pos.y][pos.x] = 1;
+}
+
+const rClick = () => {
+	visited[pos.y][pos.x] = 1;
 }
 
 const main = () => {
